@@ -20,9 +20,9 @@ public class Server {
 	public void run() {
 		loadQuestions();
 		
-		for (Question q : questions) {
-		    System.out.println(q);
-		};
+//		for (Question q : questions) {
+//		    System.out.println(q);
+//		};
 		
 		ServerSocket serverSocket = null;
 

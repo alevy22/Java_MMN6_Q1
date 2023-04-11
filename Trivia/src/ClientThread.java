@@ -4,6 +4,8 @@ import java.io.ObjectOutputStream;
 import java.io.OutputStream;
 import java.net.Socket;
 
+import javafx.application.Platform;
+
 public class ClientThread extends Thread {
 
 	private ClientController cont;
@@ -26,35 +28,37 @@ public class ClientThread extends Thread {
 			e.printStackTrace(); 
 		}	
 	}
-	
+
 	public void close() {
-		
+
 	}
 
 	public void handleQuestion() throws Exception {
-		try (Socket s = new Socket(ip, 3333)) {
-			OutputStream outputStream = s.getOutputStream();
-			ObjectOutputStream objOutputStream = new ObjectOutputStream(outputStream);
+		Socket socket = new Socket(ip, 3333);
+		InputStream inputStream = socket.getInputStream();
+		ObjectInputStream objInputStream = new ObjectInputStream(inputStream);
 
-			InputStream inputStream = s.getInputStream();
-			ObjectInputStream objInputStream = new ObjectInputStream(inputStream);
+		OutputStream outputStream = socket.getOutputStream();
+		ObjectOutputStream objOutputStream = new ObjectOutputStream(outputStream);
 
-			// get question from server
-			Question question;
-			question = (Question)objInputStream.readObject();
-			this.question = question;
-			// TO DO 
-			// present in the UI 
-			System.out.println(question.toString());
+		Question receivedQuestion = (Question) objInputStream.readObject();
+		System.out.println("Received question from server: " + receivedQuestion);
+		
+		new Thread(() -> {
+		    Platform.runLater(() -> {
+		        // update the UI on the FX Application Thread
+				cont.updateQuestion(receivedQuestion);
+		    });
+		}).start();
 
-			// close all connections              	
-//			outputStream.close();
-//			objOutputStream.close();
-//			inputStream.close();
-//			objInputStream.close();
-//			s.close();
-		}
+
+		objOutputStream.close();
+		outputStream.close();
+		objInputStream.close();
+		inputStream.close();
+		socket.close();
 	}
+
 
 	public Question getQuestion() {
 		return question;
