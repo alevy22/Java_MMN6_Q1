@@ -1,7 +1,8 @@
+import java.io.Serializable;
 import java.util.Arrays;
 import java.util.Objects;
 
-public class Question {
+public class Question implements Serializable {
 	private String question;
 	private String[] answers = new String[4];
 	private int correctAnswer; // index of the correct answer between 0-3

@@ -33,7 +33,7 @@ public class ServerThread extends Thread {
 
 	private void handleClient() throws IOException {
 		try (Scanner scanner = new Scanner(clientSocket.getInputStream())) {
-			System.out.println("New client connected from " + clientSocket.getInetAddress());
+			System.out.println("New client connected from " + clientSocket.getPort());
 
 			List<Question> unusedQuestions = new ArrayList<>(questions);
 			Collections.shuffle(unusedQuestions);
@@ -47,6 +47,7 @@ public class ServerThread extends Thread {
 						Question question = unusedQuestions.remove(0);
 						askedQuestions.add(question.hashCode());
 						try {
+							System.out.println("question to send to client: " + question.toString());
 							sendQuestion(question, clientSocket);
 						} catch (Exception e) {
 							System.err.println("Error sending question: " + e.getMessage());

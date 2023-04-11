@@ -25,7 +25,11 @@ public class ClientThread extends Thread {
 		} catch (Exception e) { 
 			e.printStackTrace(); 
 		}	
-	} 
+	}
+	
+	public void close() {
+		
+	}
 
 	public void handleQuestion() throws Exception {
 		try (Socket s = new Socket(ip, 3333)) {
@@ -44,11 +48,11 @@ public class ClientThread extends Thread {
 			System.out.println(question.toString());
 
 			// close all connections              	
-			outputStream.close();
-			objOutputStream.close();
-			inputStream.close();
-			objInputStream.close();
-			s.close();
+//			outputStream.close();
+//			objOutputStream.close();
+//			inputStream.close();
+//			objInputStream.close();
+//			s.close();
 		}
 	}
 
